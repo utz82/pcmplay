@@ -5,5 +5,5 @@
 lwasm -b -9 -o test.bin main.asm
 # if [ "$?" = "0" ]
 # then
-# 	/usr/bin/xroar -ao-fragments 1 -machine cocous -type "EXEC &HC00" test.bin
+# 	/usr/bin/xroar -ao-fragments 1 -machine cocous -type "EXEC &HF00" test.bin
 # fi
