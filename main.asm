@@ -42,10 +42,10 @@ init
 	ora #$8	
 	sta $ff23
 
-	lda #$0c
+	lda #$0f
 	tfr a,dp
 	
-	setdp $0c
+	setdp $0f
 
 	ldu #musicdata
 	stu seqpntr		;force 8-bit offset - is it necessary? 5-bit offset would save space?
