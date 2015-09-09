@@ -72,8 +72,11 @@ seqpntr equ *+1
 rdpat				;read pattern data
 		
     	lda $ff00		;read keyboard
-    	bita #8			;check if space has been pressed
-    	beq exit
+;    	bita #8			;check if space has been pressed
+;    	beq exit
+	ora #$80
+	inca
+	bne exit
 	
 	lda ,x+			;speed
 	bmi rdseq
