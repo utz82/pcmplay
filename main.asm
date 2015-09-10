@@ -1,6 +1,7 @@
 ; PCMplay 1.0
 ; 4 channel pcm sound player for CoCo/Dragon computers
 ; by utz 09'2015 * http://irrlichtproject.de 
+; suggestions and improvements by Simon Jonassen and sixxie
 ;
 ; Copyright (c) 2015, utz / irrlicht project
 ; All rights reserved.

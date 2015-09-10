@@ -1,6 +1,7 @@
 ********************************************************************************
 PCMplay v1.0
 by utz 09'2015 * http://irrlichtproject.de
+suggestions and improvements by Simon Jonassen and sixxie
 ********************************************************************************
 
 
@@ -9,7 +10,7 @@ About
 
 PCMplay is a multi-channel PCM WAV player for CoCo/Dragon computers. It mixes
 four channels of fixed-length, looped WAV samples at a discretion frequency of 
-approximately 7295 Hz.
+approximately 7782 Hz.
 
 You are free to use PCMplay in your own game/demo/music projects, provided you
 don't violate the terms of the BSD 3-clause license. See 'main.asm' for 
