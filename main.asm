@@ -37,7 +37,13 @@ init
 
  	lda #$7f		;setup keyboard matrix
  	sta $ff02
-	
+
+	; only DAC bits are outputs
+	clr $ff21
+	ldd #$fc34
+	sta $ff20
+	stb $ff21
+
 	lda $ff23		;switch on DAC
 	ora #$8	
 	sta $ff23
@@ -172,12 +178,11 @@ smpp3 equ *+2
 	addb $ff00	;5
 smpp4 equ *+2
 	addb $ff00	;5
-	orb #2		;2	;keep rs232 happy
 	stb ,u		;4	;store in DAC
 
 	leay -1,y	;5	;decrement speed counter
 	bne play	;3	;loop if not zero
-			;118 ~7584Hz
+			;116 ~7715Hz
 
 	jmp rdpat
 
