@@ -53,11 +53,17 @@ init
 	
 	setdp $0f
 
+	sts srestore		;preserve stack pointer
+
 	ldu #musicdata
 	stu seqpntr		;force 8-bit offset - is it necessary? 5-bit offset would save space?
 	bra rdseq
 	
 exit
+
+srestore equ *+2
+	lds #$0000		;restore stack pointer
+
 	puls cc,d,dp,x,y,u	;restore regs and enable interrupts		
 	rts
 ;*******************************************************************
@@ -68,7 +74,7 @@ rdseq0
 rdseq				;read sequence data
 seqpntr equ *+1
 	ldu #$0
-	ldx ,u++		;load actual pattern pointer
+	lds ,u++		;load actual pattern pointer
 	;beq exit		;uncomment to disable looping
 	beq rdseq0		;check for end of sequence
 
@@ -84,12 +90,12 @@ rdpat				;read pattern data
 	inca
 	bne exit
 	
-	lda ,x+			;speed
+	lda ,s+			;speed
 	bmi rdseq
 	sta speed
 
 	ldy #freqtab	
-	ldd ,x++		;freq1,2
+	puls d			;freq1,2
 	asla
 	ldu a,y
 	stu fch1
@@ -97,7 +103,7 @@ rdpat				;read pattern data
 	ldu b,y
 	stu fch2
 	
-	ldd ,x++		;freq3,4
+	puls d			;freq3,4
 	asla
 	ldu a,y
 	stu fch3
@@ -105,13 +111,13 @@ rdpat				;read pattern data
 	ldu b,y
 	stu fch4	
 	
-	ldd ,x++
+	puls d
 	sta smpp1-1		;smp1
 	stb smpp2-1		;smp2
 	
-	ldd ,x++
+	puls d
 	sta smpp3-1		;smp3
-	stb smpp4-1		;smp4
+	stb smp4		;smp4
 	
 speed equ *+2
 	ldy #$0
@@ -124,8 +130,12 @@ speed equ *+2
 	sta smpp1		;reset sample pointers
 	sta smpp2
 	sta smpp3
+	lda #$80
 	sta smpp4
-	
+
+smp4 equ *+1
+	ldx #$ff80
+
 	ldu #$ff20		;set up pointer to DAC
 
 ;*******************************************************************
@@ -165,24 +175,24 @@ cch4 equ *+1
 fch4 equ *+1
 	addd #$0	;4	;add base freq ch2
 	std cch4	;5	;and store back
-	
-	bcc wait4	;3
-	inc smpp4	;6	;if carry, move pointer
 
-skip4
+smpp4 equ *+1
+	ldb #$80	;2
+	adcb #0		;2
+	stb smpp4	;4
+	ldb b,x		;5	;load and add sample bytes
+
 smpp1 equ *+2
-	ldb $ff00	;5	;load and add sample bytes
+	addb $ff00	;5
 smpp2 equ *+2
 	addb $ff00	;5
 smpp3 equ *+2
-	addb $ff00	;5
-smpp4 equ *+2
 	addb $ff00	;5
 	stb ,u		;4	;store in DAC
 
 	leay -1,y	;5	;decrement speed counter
 	bne play	;3	;loop if not zero
-			;116 ~7715Hz
+			;115 ~7782Hz
 
 	jmp rdpat
 
@@ -197,11 +207,7 @@ wait2
 wait3
 	brn *
 	bra skip3
-	
-wait4
-	brn *
-	bra skip4
-	
+
 ;*******************************************************************
 	align $100	
 samples
