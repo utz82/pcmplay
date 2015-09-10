@@ -100,12 +100,12 @@ rdpat				;read pattern data
 	stu fch4	
 	
 	ldd ,x++
-	sta smpp1-1		;smp2
-	stb smpp2-1		;set sample 1,2
+	sta smpp1-1		;smp1
+	stb smpp2-1		;smp2
 	
 	ldd ,x++
-	sta smpp3-1		;smp2			
-	stb smpp4-1		;smp3
+	sta smpp3-1		;smp3
+	stb smpp4-1		;smp4
 	
 speed equ *+2
 	ldy #$0
@@ -177,7 +177,7 @@ smpp4 equ *+2
 
 	leay -1,y	;5	;decrement speed counter
 	bne play	;3	;loop if not zero
-			;122 ~7295Hz				
+			;118 ~7584Hz
 
 	jmp rdpat
 
@@ -208,5 +208,4 @@ freqtab
 	
 musicdata		
 	include "music.asm"	
-		
-		
+
